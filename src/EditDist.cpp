@@ -210,18 +210,26 @@ void PrintMatching(vvvvi& BP, vvi& L1, vvi& L2, vvi& T1, vvi& T2, vvi& D1, vvi& 
             int x = n - p - T1[i][j + 1], y = m - q - T2[k][l + 1];
             cout << "MATCH " << (swp ? ys : xs) << ' ' << (swp ? xs : ys) << '\n';
             myfile << (swp ? t2Label2Node[std::to_string(ys)] : t1Label2Node[std::to_string(xs)]) << ' ' << (swp ? t1Label2Node[std::to_string(xs)] : t2Label2Node[std::to_string(ys)]) << '\n';
-            PrintMatching(BP, L1, L2, T1, T2, D1, D2, {i, j + T1[i][j + 1], k, l + T2[k][l + 1]}, swp, myfile, t1Label2Node, t2Label2Node);
-            PrintMatching(BP, L1, L2, T1, T2, D1, D2, {p + 1, x, q + 1, y}, swp, myfile, t1Label2Node, t2Label2Node);
+	    i4 r1{i, j + T1[i][j + 1], k, l + T2[k][l + 1]};
+            PrintMatching(BP, L1, L2, T1, T2, D1, D2, r1, swp, myfile, t1Label2Node, t2Label2Node);
+	    i4 r2{p + 1, x, q + 1, y};
+            PrintMatching(BP, L1, L2, T1, T2, D1, D2, r2, swp, myfile, t1Label2Node, t2Label2Node);
             break;
         }
-        case DEL_NODE:
+        case DEL_NODE: 
+        {
             cout << (!swp ? "DEL " : "INS ") << L1[i][j + 1] << '\n';
-            PrintMatching(BP, L1, L2, T1, T2, D1, D2, {i, j + 1, k, l}, swp, myfile, t1Label2Node, t2Label2Node);
-            break;
+	    i4 r3{i, j + 1, k, l};
+            PrintMatching(BP, L1, L2, T1, T2, D1, D2, r3, swp, myfile, t1Label2Node, t2Label2Node);
+            break; 
+        }
         case INS_NODE:
+	{
             cout << (!swp ? "INS " : "DEL ") << L2[k][l + 1] << '\n';
-            PrintMatching(BP, L1, L2, T1, T2, D1, D2, {i, j, k, l + 1}, swp, myfile, t1Label2Node, t2Label2Node);
+	    i4 r4{i, j, k, l + 1};
+            PrintMatching(BP, L1, L2, T1, T2, D1, D2, r4, swp, myfile, t1Label2Node, t2Label2Node);
             break;
+	}
     }
 }
 
@@ -280,7 +288,8 @@ void EditDist(Graph& g1, Graph& g2, string & fileName, string & outSolution, std
         DeallocTree(nroot);
     }
     ofstream myfile(outSolution);
-    PrintMatching(BP, BL1, BL2, BT1, BT2, BD1, BD2, {0, 0, 0, 0}, swp, myfile, t1Label2Node, t2Label2Node);
+    i4 r{0,0,0,0};
+    PrintMatching(BP, BL1, BL2, BT1, BT2, BD1, BD2, r, swp, myfile, t1Label2Node, t2Label2Node);
     myfile.close();
     clog << "DIST: " << (double)mm/scale << endl;
     ofstream score(outScore);

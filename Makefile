@@ -1,5 +1,5 @@
 CXX = g++
-CFLAGS = -O2 -std=c++17 -pthread -march=native
+CFLAGS = -O2 -std=c++14 -pthread -march=native
 INCL = -I.
 VPATH = src
 BINARIES = trajan bgen convert fpt
